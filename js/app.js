@@ -15,6 +15,12 @@ $(() => {
   const $squares = $('.grid div')
   $squares.eq(playerIndex).addClass('player')
 
+  function movePlayer() {
+    $squares.eq(playerIndex)
+      .addClass('player')
+      .attr('data-direction', direction)
+  }
+
 
 
 })
