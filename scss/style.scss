@@ -1,5 +1,5 @@
 * {
-    box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 body {
@@ -15,15 +15,15 @@ body {
 }
 
 .grid {
-    align-items: center;
-    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
-    display: flex;
-    flex-grow: 1;
-    flex-wrap: wrap;
-    height: 100%;
-    justify-content: center;
-    max-height: 700px;
-    max-width: 900px;
+  align-items: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  height: 100%;
+  justify-content: center;
+  max-height: 700px;
+  max-width: 900px;
 }
 
 .grid[data-width="10"] div {
@@ -33,18 +33,21 @@ body {
 }
 
 .grid div.player{
-    background-image: url("../images/ships.png");
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: cover;
-    height: 70px;
-    width: 90px;
-
-
-
+  background-image: url("../images/ships.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 70px;
+  width: 90px;
 }
+
 .grid div.aliens{
-    background: blue;
+  background-image: url("../images/aliens.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 70px;
+  width: 90px;
 }
 
 .missile {

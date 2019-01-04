@@ -1,12 +1,11 @@
 $(() => {
   const width = 10
   const $grid = $('.grid')
-  let playerIndex = 90
-  let aliensIndex = 0
-  let shootingIndex
+  let playerIndex = 95
+  let shootingIndex = 0
 
 
-  //------------- create square grid with divs ----------------
+  //------------- create 10 x 10 grid with divs ----------------
   $grid.attr('data-width', width)
 
   for(let i = 0; i < width*width; i++) {
@@ -14,19 +13,19 @@ $(() => {
   }
 
   //---------- place the player at the bottom of the grid --------
-  const $squares = $('.grid div')
-  $squares.eq(playerIndex).addClass('player')
+  const $divs = $('.grid div')
+  $divs.eq(playerIndex).addClass('player')
 
   // --------- function to move player -----------
   function movePlayer() {
-    $squares.eq(playerIndex).addClass('player')
+    $divs.eq(playerIndex).addClass('player')
   }
 
-  // ------------- event listerner to move player ----------------
+  // ------------- Handle plapyer events ----------------
 
   $(document).on('keydown', e => {
 
-    $squares.eq(playerIndex).removeClass('player')
+    $divs.eq(playerIndex).removeClass('player')
     //move player left 37
     switch(e.keyCode) {
       case 37: if(playerIndex % width > 0)
@@ -38,16 +37,38 @@ $(() => {
         break
         // fire at space bar
       case 32:
-        console.log('FIRE AT ' + playerIndex)
+        console.log('FIRED at ' + playerIndex)
         drawMissile()
     }
     movePlayer()
   })
 
-  // -------- create Missile function from the player  ----------
+  // -------- draw Missile function ----------
   function drawMissile(){
-    // when spacebar is pressed add lazer class to the current position of the player
-    $squares.eq(playerIndex-width).addClass('missile')
+    const gameLoop = new GameLoop(playerIndex)
+    gameLoop.loop()
+  }
+
+  function moveMissiles(playerIndex, offset) {
+    console.log(playerIndex - (width*offset))
+    $divs.eq(playerIndex-(width * offset)).addClass('missile')
+    $divs.eq(playerIndex-(width * (offset -1))).removeClass('missile')
+  }
+
+  function GameLoop(playerIndex){
+
+    this.currentIndex = 0
+    this.playerIndex = playerIndex
+
+    this.loop = () => {
+      this.interval = setInterval(() => {
+        if (this.currentIndex >= 8) {
+          clearInterval(this.interval)
+        }
+        this.currentIndex = this.currentIndex + 1
+        moveMissiles(this.playerIndex, this.currentIndex)
+      }, 200)
+    }
   }
 
   // -------------- create aliens on top ------------------------
@@ -55,7 +76,7 @@ $(() => {
 
   function aliens() {
     for(let i = 0; i < 10; i++){
-      $squares.eq([i]).addClass('aliens')
+      $divs.eq([i]).addClass('aliens')
     }
   }
 
