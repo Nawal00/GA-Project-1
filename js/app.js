@@ -1,46 +1,63 @@
 $(() => {
   const width = 10
-  let playerIndex = 90
-  let direction = 'forward'
   const $grid = $('.grid')
+  let playerIndex = 90
+  let aliensIndex = 0
+  let shootingIndex
 
-  //create square grid with divs
+
+  //------------- create square grid with divs ----------------
   $grid.attr('data-width', width)
 
   for(let i = 0; i < width*width; i++) {
-    $grid.append($('<div />'))
+    $grid.append($('<div/>'))
   }
 
-  //create player at the bottom of the grid
+  //---------- place the player at the bottom of the grid --------
   const $squares = $('.grid div')
   $squares.eq(playerIndex).addClass('player')
 
+  // --------- function to move player -----------
   function movePlayer() {
-    $squares.eq(playerIndex)
-      .addClass('player')
-      .attr('data-direction', direction)
+    $squares.eq(playerIndex).addClass('player')
   }
 
-  // move player left and right
-  $(document).on('keydown', e => {
-    // left 37, right 39
-    $squares.eq(playerIndex).removeClass('player')
+  // ------------- event listerner to move player ----------------
 
+  $(document).on('keydown', e => {
+
+    $squares.eq(playerIndex).removeClass('player')
+    //move player left 37
     switch(e.keyCode) {
-      case 37: if(playerIndex % width > 0){
+      case 37: if(playerIndex % width > 0)
         playerIndex--
-        direction = 'backward'
-      }
         break
-      case 39: if(playerIndex % width < width-1) {
+        // move player right 39
+      case 39: if(playerIndex % width < width-1)
         playerIndex++
-        direction = 'forward'
-      }
         break
+        // fire at space bar
+      case 32:
+        console.log('FIRE AT ' + playerIndex)
+        drawMissile()
     }
     movePlayer()
   })
 
+  // -------- create Missile function from the player  ----------
+  function drawMissile(){
+    // when spacebar is pressed add lazer class to the current position of the player
+    $squares.eq(playerIndex-width).addClass('missile')
+  }
 
+  // -------------- create aliens on top ------------------------
+ // let enemies = []
 
+  function aliens() {
+    for(let i = 0; i < 10; i++){
+      $squares.eq([i]).addClass('aliens')
+    }
+  }
+
+  aliens()
 })

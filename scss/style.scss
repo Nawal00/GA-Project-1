@@ -8,6 +8,10 @@ body {
   height: 100vh;
   justify-content: center;
   margin: 0;
+  background-image: url("../images/background.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
 }
 
 .grid {
@@ -18,8 +22,8 @@ body {
     flex-wrap: wrap;
     height: 100%;
     justify-content: center;
-    max-height: 600px;
-    max-width: 600px;
+    max-height: 700px;
+    max-width: 900px;
 }
 
 .grid[data-width="10"] div {
@@ -29,5 +33,22 @@ body {
 }
 
 .grid div.player{
-    background-color: #f05;
+    background-image: url("../images/ships.png");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    height: 70px;
+    width: 90px;
+
+
+
+}
+.grid div.aliens{
+    background: blue;
+}
+
+.missile {
+  background-image: url("../images/missile1.png");
+  background-repeat: no-repeat;
+  background-position: center;
 }
