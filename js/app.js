@@ -1,15 +1,16 @@
 $(() => {
-  const width = 10
+  // const width = 10
   const $grid = $('.grid')
   let playerIndex = 95
   let shootingIndex = 0
 
 
-  //------------- create 10 x 10 grid with divs ----------------
-  $grid.attr('data-width', width)
 
-  for(let i = 0; i < width*width; i++) {
-    $grid.append($('<div/>'))
+  //------------- create 10 x 10 grid with divs ----------------
+  // $grid.attr('data-width', width)
+
+  for(let i = 0; i < 100; i++) {
+    $grid.append($('<div>' + i + '</div>'))
   }
 
   //---------- place the player at the bottom of the grid --------
@@ -28,11 +29,11 @@ $(() => {
     $divs.eq(playerIndex).removeClass('player')
     //move player left 37
     switch(e.keyCode) {
-      case 37: if(playerIndex % width > 0)
+      case 37: if(playerIndex % 10 > 0)
         playerIndex--
         break
         // move player right 39
-      case 39: if(playerIndex % width < width-1)
+      case 39: if(playerIndex % 10 < 9)
         playerIndex++
         break
         // fire at space bar
@@ -50,9 +51,9 @@ $(() => {
   }
 
   function moveMissiles(playerIndex, offset) {
-    console.log(playerIndex - (width*offset))
-    $divs.eq(playerIndex-(width * offset)).addClass('missile')
-    $divs.eq(playerIndex-(width * (offset -1))).removeClass('missile')
+    console.log(playerIndex - (10 * offset))
+    $divs.eq(playerIndex-(10 * offset)).addClass('missile')
+    $divs.eq(playerIndex-(10 * (offset -1))).removeClass('missile')
   }
 
   function GameLoop(playerIndex){
@@ -72,13 +73,37 @@ $(() => {
   }
 
   // -------------- create aliens on top ------------------------
- // let enemies = []
 
-  function aliens() {
-    for(let i = 0; i < 10; i++){
-      $divs.eq([i]).addClass('aliens')
+
+
+  // adds 8 aliens to the top row
+  // offset is initially is 0 and icrements in 10,
+  function stepAliens(offset) {
+    for(let i = 1; i <= 8; i++){
+      $divs.eq([i + offset]).addClass('aliens')
     }
   }
 
-  aliens()
+  function removeAliens(offset) {
+    // if offset is greater or equal to 20
+    if(offset >=20 ) {
+      for(let i = 1; i <=8; i++){
+        // 1 + 21 - 20 = 1 remove class from 1
+        $divs.eq(i + offset -20).removeClass('aliens')
+      }
+    }
+  }
+
+  let currentAliensIndex = 0
+  stepAliens(currentAliensIndex)
+
+  setInterval(() => {
+    currentAliensIndex = currentAliensIndex + 10
+    //step add aliens curr index + 10
+    stepAliens(currentAliensIndex)
+    //step add aliens curr index - 20
+    removeAliens(currentAliensIndex)
+  }, 2000)
+
+
 })
