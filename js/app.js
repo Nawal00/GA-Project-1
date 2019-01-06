@@ -47,34 +47,33 @@ $(() => {
     let shootingIndex = playerIndex
 
     const missileInterval = setInterval(() => {
-      // The shot is placed on the row above its current position...
+      // The missile on row above
       $divs.eq(shootingIndex + missileIndex).addClass('missile')
-      // ...removed from its current position...
+      // remove its current position
       $divs.eq(shootingIndex).removeClass('missile')
-      // ...and current position is reassigned to new position
+      // current position is reassigned to new position
       shootingIndex += missileIndex
-
+      // when the missile hits the alien remove the aliens
       if($divs.eq(shootingIndex).hasClass('aliens')){
-        console.log('HIT')
         $divs.eq(shootingIndex).removeClass('aliens')
       }
-      // When the shot has reached the top of the screen...
+      // if the missile is at top
       if (shootingIndex<0 || shootingIndex>100){
-        // ...the movement timer stops...
+        // stop missile interval
         clearInterval(missileInterval)
-        // ...and the shot is removed from the gameboard
+        // remove missile 
         $divs.eq(shootingIndex).removeClass('missile')
       }
     }, 100)
   }
 
-  // -------------- create aliens on top ------------------------
+  // -------------- add aliens on top row   ------------------------
 
   // adds 8 aliens to the top row
   function stepAliens(offset, startValue) {
     // offset is initially 0 and then icrements in 10s,
     for(let i = 0; i <= 9; i++){
-      // remove aliens on 0 & 1 then remove aliens on 9 & 8
+      // remove aliens on index 0 & 1 then remove aliens on index 9 & 8
       if (i < startValue || i > startValue + 7) {
         $divs.eq(i + offset).removeClass('aliens')
       } else {
@@ -83,22 +82,64 @@ $(() => {
     }
   }
 
-  // remove aliens function from previous row
+  // remove previous row of aliens
   function removeAliens(offset) {
     for(let i = 0; i <=9; i++){
       $divs.eq(i + offset).removeClass('aliens')
     }
+    // }
   }
 
-stepAliens(currentAliensIndex, startIndexes[rowMoveCount])
   //-------------- moves aliens on the row to right & left ---------------
 
   let currentAliensIndex = 0
-  let rowMoveCount = 0
-  let startIndexes
   // const moveAliens = [0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0]
 
+  const makeRowMoves =((direction) => {
+    let startIndexes
+    let rowMoveCount = 0
+    const rightMoves = [0,1,2]
+    const leftMoves = [2,1,0]
 
+    if (direction === 'right') {
+      //aliens moves to right edge
+      startIndexes = rightMoves
+    }
+
+    if (direction === 'left') {
+      //aliens moves to left edge
+      startIndexes = leftMoves
+    }
+
+    stepAliens(currentAliensIndex, startIndexes[rowMoveCount])
+    rowMoveCount ++
+
+//------------------ move aliens down a row ------------------
+
+    const interval = setInterval(() => {
+      if (rowMoveCount === 3) {
+        //move down a row
+        currentAliensIndex = currentAliensIndex + 10
+
+        if (direction === 'right') {
+          makeRowMoves('left')
+          //remove aliens on the row above
+          removeAliens(currentAliensIndex -10)
+        }
+
+        if(direction === 'left') {
+          makeRowMoves('right')
+          removeAliens(currentAliensIndex -10)
+        }
+        clearInterval(interval)
+        return
+      }
+      stepAliens(currentAliensIndex, startIndexes[rowMoveCount])
+      rowMoveCount ++
+    }, 1000)
+  })
+
+  makeRowMoves('right')
 
 
   // const aliensGoDown = setInterval(() => {
