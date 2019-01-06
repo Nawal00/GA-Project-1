@@ -1,19 +1,15 @@
 $(() => {
-  // const width = 10
   const $grid = $('.grid')
   let playerIndex = 95
-  let shootingIndex = 0
 
-
-
-  //------------- create 10 x 10 grid with divs ----------------
-  // $grid.attr('data-width', width)
+  //------------- create 10 x 10 grid divs ---------------
 
   for(let i = 0; i < 100; i++) {
     $grid.append($('<div>' + i + '</div>'))
   }
 
   //---------- place the player at the bottom of the grid --------
+
   const $divs = $('.grid div')
   $divs.eq(playerIndex).addClass('player')
 
@@ -39,71 +35,80 @@ $(() => {
         // fire at space bar
       case 32:
         console.log('FIRED at ' + playerIndex)
-        drawMissile()
+        moveMissile(playerIndex, -10)
     }
     movePlayer()
   })
 
   // -------- draw Missile function ----------
-  function drawMissile(){
-    const gameLoop = new GameLoop(playerIndex)
-    gameLoop.loop()
-  }
 
-  function moveMissiles(playerIndex, offset) {
-    console.log(playerIndex - (10 * offset))
-    $divs.eq(playerIndex-(10 * offset)).addClass('missile')
-    $divs.eq(playerIndex-(10 * (offset -1))).removeClass('missile')
-  }
+  function moveMissile(playerIndex, missileIndex){
 
-  function GameLoop(playerIndex){
+    let shootingIndex = playerIndex
 
-    this.currentIndex = 0
-    this.playerIndex = playerIndex
+    const missileInterval = setInterval(() => {
+      // The shot is placed on the row above its current position...
+      $divs.eq(shootingIndex + missileIndex).addClass('missile')
+      // ...removed from its current position...
+      $divs.eq(shootingIndex).removeClass('missile')
+      // ...and current position is reassigned to new position
+      shootingIndex += missileIndex
 
-    this.loop = () => {
-      this.interval = setInterval(() => {
-        if (this.currentIndex >= 8) {
-          clearInterval(this.interval)
-        }
-        this.currentIndex = this.currentIndex + 1
-        moveMissiles(this.playerIndex, this.currentIndex)
-      }, 200)
-    }
+      if($divs.eq(shootingIndex).hasClass('aliens')){
+        console.log('HIT')
+        $divs.eq(shootingIndex).removeClass('aliens')
+      }
+      // When the shot has reached the top of the screen...
+      if (shootingIndex<0 || shootingIndex>100){
+        // ...the movement timer stops...
+        clearInterval(missileInterval)
+        // ...and the shot is removed from the gameboard
+        $divs.eq(shootingIndex).removeClass('missile')
+      }
+    }, 100)
   }
 
   // -------------- create aliens on top ------------------------
 
-
-
   // adds 8 aliens to the top row
-  // offset is initially is 0 and icrements in 10,
-  function stepAliens(offset) {
-    for(let i = 1; i <= 8; i++){
-      $divs.eq([i + offset]).addClass('aliens')
-    }
-  }
-
-  function removeAliens(offset) {
-    // if offset is greater or equal to 20
-    if(offset >=20 ) {
-      for(let i = 1; i <=8; i++){
-        // 1 + 21 - 20 = 1 remove class from 1
-        $divs.eq(i + offset -20).removeClass('aliens')
+  function stepAliens(offset, startValue) {
+    // offset is initially 0 and then icrements in 10s,
+    for(let i = 0; i <= 9; i++){
+      // remove aliens on 0 & 1 then remove aliens on 9 & 8
+      if (i < startValue || i > startValue + 7) {
+        $divs.eq(i + offset).removeClass('aliens')
+      } else {
+        $divs.eq(i + offset).addClass('aliens')
       }
     }
   }
 
+  // remove aliens function from previous row
+  function removeAliens(offset) {
+    for(let i = 0; i <=9; i++){
+      $divs.eq(i + offset).removeClass('aliens')
+    }
+  }
+
+stepAliens(currentAliensIndex, startIndexes[rowMoveCount])
+  //-------------- moves aliens on the row to right & left ---------------
+
   let currentAliensIndex = 0
-  stepAliens(currentAliensIndex)
-
-  setInterval(() => {
-    currentAliensIndex = currentAliensIndex + 10
-    //step add aliens curr index + 10
-    stepAliens(currentAliensIndex)
-    //step add aliens curr index - 20
-    removeAliens(currentAliensIndex)
-  }, 2000)
+  let rowMoveCount = 0
+  let startIndexes
+  // const moveAliens = [0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0]
 
 
+
+
+  // const aliensGoDown = setInterval(() => {
+  //   stepAliens(currentAliensIndex, moveAliens[startValue])
+  //   startValue ++
+  //   if ((startValue) % 3 === 0) {
+  //     currentAliensIndex = currentAliensIndex + 10
+  //     //step add aliens curr index - 20
+  //   }
+  // }, 1000)
+  //
+  // aliensGoDown()
 })
