@@ -56,3 +56,10 @@ body {
   background-repeat: no-repeat;
   background-position: center;
 }
+
+.display{
+  display: flex;
+  max-height: 30px;
+  max-width: 600px;
+  margin: 0;
+}

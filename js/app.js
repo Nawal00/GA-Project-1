@@ -1,17 +1,23 @@
 $(() => {
   const $grid = $('.grid')
   const width = 20
+  const $playerScore = $('.playerScore')
   let playerIndex = 388
-  let aliensInRow = 15
+  let aliensInRow = 10
   let direction = 'right'
   let changeDirection = false
   let deadAlienIndex
   let alienArray = []
+  let alienMovingTimer
+  let gameOver = false
+  let score = 0
+  let missileInterval
+  const $winOrLoss = $('.winOrLoss')
 
   //------------- create 10 x 10 grid divs ---------------
 
   for(let i = 0; i < width * width; i++) {
-    $grid.append($('<div> </div>'))
+    $grid.append($('<div>', '</div>'))
   }
 
   //---------- place the player at the bottom of the grid --------
@@ -51,7 +57,7 @@ $(() => {
 
     let shootingIndex = playerIndex
 
-    const missileInterval = setInterval(() => {
+    missileInterval = setInterval(() => {
       // The missile on row above
       $divs.eq(shootingIndex + missileIndex).addClass('missile')
       // remove its current position
@@ -61,33 +67,41 @@ $(() => {
       // when the missile hits the alien remove the aliens
       if($divs.eq(shootingIndex).hasClass('aliens')){
         deadAlienIndex = shootingIndex
-        console.log(` dead alien index is ${deadAlienIndex}`)
+        //remove aliens from div/grid hit my missle
         $divs.eq(shootingIndex).removeClass('aliens')
-        handleDeadAlien(shootingIndex)
-      }
-      // if the missile is at top
-      if (shootingIndex<0 || shootingIndex>400){
-        // stop missile interval
-        clearInterval(missileInterval)
-        // remove missile
         $divs.eq(shootingIndex).removeClass('missile')
+        //remove aliens from array hit my missle
+        handleDeadAlien(deadAlienIndex)
+        //increment score by 20 if user hits an alien
+        updateScore()
+        // clearInterval(missileInterval)
+
+      }
+      // if the missile is at top or below divs/grid
+      if (shootingIndex<0 || shootingIndex>400){
+          // remove missile
+        $divs.eq(shootingIndex).removeClass('missile')
+        // stop missile interval
+
+        clearInterval(missileInterval)
       }
     }, 100)
   }
 
-// delete alien from array if
-  function handleDeadAlien(shootingIndex){
-    alienArray = alienArray.filter(element =>  element !== shootingIndex)
+  // filter as in delete aliens index with shootingIndex
+  function handleDeadAlien(deadAlienIndex){
+    alienArray = alienArray.filter(element =>  element !== deadAlienIndex)
     console.log(alienArray)
   }
 
   // -------------- add aliens on top row   ------------------------
 
   //push alien to an array
-  function createRow(startIndex){
-    for (let i = startIndex; i < aliensInRow; i++) {
-      $divs[i].classList.add('aliens')
-      alienArray.push(i)
+  function displayAlienrow(startIndex){
+    for (let i = 0; i < aliensInRow; i++) {
+      $divs[startIndex].classList.add('aliens')
+      alienArray.push(startIndex)
+      startIndex ++
     }
   }
 
@@ -101,7 +115,7 @@ $(() => {
     }
   }
 
-//show Alien
+  //show Alien
   function showAliensMoving(){
     $divs.each(index => {
       if($divs[index].classList.value === 'aliens'){
@@ -114,13 +128,13 @@ $(() => {
     })
   }
 
-  function moveAlien(direction) {
+  function alienDirection(direction) {
     for (let i=0; i < alienArray.length; i++) {
       if (direction === 'left') {
         alienArray[i] -= 1
       } else if (direction === 'right') {
         alienArray[i] += 1
-      } else {                        //don't put set direction to down here
+      } else {
         alienArray[i] += width
       }
     }
@@ -140,9 +154,9 @@ $(() => {
   }
   // starts the aliens moving and should be refered back to to change direction
   function gameLoop() {
-    setInterval(function() {
+    alienMovingTimer = setInterval(function() {
       if(changeDirection){               //starts as false so these if options are skipped
-        moveAlien('down')
+        alienDirection('down')
         if(direction ==='left'){
           direction ='right'
         }else{
@@ -150,26 +164,49 @@ $(() => {
         }
         changeDirection = false
       }else{
-        moveAlien(direction)        //this starts the directions. it is set to 'right' at the top intiially
-        checkEdgeOfscreen()                //this check alien boundaries and see whether to change direction
-        // endgameWin()
+        alienDirection(direction)
+        checkEdgeOfscreen()
+        checkLoseGame()
+        checkWinGame()
       }
-    }, 1000)
+    }, 500)
   }
 
+  function checkWinGame(){
+    //if arr is empty you win
+    if(alienArray.length === 0){
+      $winOrLoss.Text('you Win')
+    }
+  }
 
+  function checkLoseGame(){
+    //if alien arr is on the last row,
+    alienArray.forEach((elem) => {
+      if(elem > width*width - width){
+        // user lose
+        $winOrLoss.Text('you Lose')
+        endGame()
+      }
+    })
+  }
 
+// update score
+  function updateScore() {
+    score += 20
+    $playerScore.text(score)
+  }
 
+// engd game func to stop alien moving
+  function endGame(){
+    clearInterval(alienMovingTimer)
+  }
 
-  createRow(0)
-  createRow(10)
+  displayAlienrow(0)
+  displayAlienrow(20)
+  displayAlienrow(40)
+
   gameLoop()
 
-
-
-
   console.log(alienArray)
-
-
 
 })
