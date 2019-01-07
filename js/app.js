@@ -1,12 +1,17 @@
 $(() => {
   const $grid = $('.grid')
-  let playerIndex = 95
-  const width = 10
+  const width = 20
+  let playerIndex = 388
+  let aliensInRow = 15
+  let direction = 'right'
+  let changeDirection = false
+  let deadAlienIndex
+  let alienArray = []
 
   //------------- create 10 x 10 grid divs ---------------
 
-  for(let i = 0; i < 100; i++) {
-    $grid.append($('<div>' + i + '</div>'))
+  for(let i = 0; i < width * width; i++) {
+    $grid.append($('<div> </div>'))
   }
 
   //---------- place the player at the bottom of the grid --------
@@ -30,7 +35,7 @@ $(() => {
         playerIndex--
         break
         // move player right 39
-      case 39: if(playerIndex % width  < 9)
+      case 39: if(playerIndex <($divs.length-1))
         playerIndex++
         break
         // fire on space bar press
@@ -41,7 +46,6 @@ $(() => {
   })
 
   // -------- move Missile function ----------
-  let deadAlienIndex
 
   function moveMissile(playerIndex, missileIndex){
 
@@ -56,12 +60,13 @@ $(() => {
       shootingIndex += missileIndex
       // when the missile hits the alien remove the aliens
       if($divs.eq(shootingIndex).hasClass('aliens')){
-        $divs.eq(shootingIndex).removeClass('aliens')
         deadAlienIndex = shootingIndex
         console.log(` dead alien index is ${deadAlienIndex}`)
+        $divs.eq(shootingIndex).removeClass('aliens')
+        handleDeadAlien(shootingIndex)
       }
       // if the missile is at top
-      if (shootingIndex<0 || shootingIndex>100){
+      if (shootingIndex<0 || shootingIndex>400){
         // stop missile interval
         clearInterval(missileInterval)
         // remove missile
@@ -70,83 +75,101 @@ $(() => {
     }, 100)
   }
 
+// delete alien from array if
+  function handleDeadAlien(shootingIndex){
+    alienArray = alienArray.filter(element =>  element !== shootingIndex)
+    console.log(alienArray)
+  }
 
   // -------------- add aliens on top row   ------------------------
 
-  let currentAliensIndex = 0
-  // adds 8 aliens to the top row
-  function stepAliens(currentAliensIndex, startValue) {
-    // currentAliensIndex is initially 0 and ...
-    // then icrements in 10s which moves the aliens down a row,
-    for(let i = 0; i <= 9; i++){
-      // remove aliens on index 0 then 1 when they move right
-      // remove aliens on index 9 & 8 when they move to left
-      if (i < startValue || i > startValue + 7) {
-        $divs.eq(i + currentAliensIndex).removeClass('aliens')
-      } else {
-        $divs.eq(i + currentAliensIndex).addClass('aliens')
-      }
+  //push alien to an array
+  function createRow(startIndex){
+    for (let i = startIndex; i < aliensInRow; i++) {
+      $divs[i].classList.add('aliens')
+      alienArray.push(i)
     }
   }
 
-  // remove previous row of aliens
-  function removeAliens(currentAliensIndex) {
-    for(let i = 0; i <=9; i++){
-      $divs.eq(i + currentAliensIndex).removeClass('aliens')
+  //move aliens inside the array
+  function moveAliens(){
+    let previousIndex
+
+    for (let i = 0; i < alienArray.length; i++) {
+      previousIndex = alienArray[i]
+      alienArray[i] += 1
     }
   }
 
-  //-------------- moves aliens on the row to right & then to left ---------------
-
-  // const moveAliens = [0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0]
-
-  function makeRowMoves (direction) {
-
-    let startIndexes
-    let rowMoveCount = 0
-    const rightMoves = [0,1,2]
-    const leftMoves = [2,1,0]
-
-    if (direction === 'right') {
-      //aliens moves to right edge
-      startIndexes = rightMoves
-    }
-
-    if (direction === 'left') {
-      //aliens moves to left edge
-      startIndexes = leftMoves
-    }
-
-    stepAliens(currentAliensIndex, startIndexes[rowMoveCount])
-    rowMoveCount ++
-
-    //------------------ move aliens down a row ------------------
-
-    const interval = setInterval(() => {
-      // if the aliens reaches edge of the grid row is 3
-      if (rowMoveCount === 3) {
-        //move aiens down a row if aliens reaches rowMoveCount 3
-        currentAliensIndex = currentAliensIndex + width
-
-        if (direction === 'right') {
-          makeRowMoves('left')
-          //remove aliens on the row above
-          removeAliens(currentAliensIndex -width)
-        }
-
-        if(direction === 'left') {
-          makeRowMoves('right')
-          removeAliens(currentAliensIndex -width)
-        }
-        clearInterval(interval)
-        return
+//show Alien
+  function showAliensMoving(){
+    $divs.each(index => {
+      if($divs[index].classList.value === 'aliens'){
+        //remove alien
+        $divs[index].classList.remove('aliens')
       }
+    })
+    alienArray.forEach(index => {
+      $divs[index].classList.add('aliens')
+    })
+  }
 
-      stepAliens(currentAliensIndex, startIndexes[rowMoveCount])
-      rowMoveCount ++
+  function moveAlien(direction) {
+    for (let i=0; i < alienArray.length; i++) {
+      if (direction === 'left') {
+        alienArray[i] -= 1
+      } else if (direction === 'right') {
+        alienArray[i] += 1
+      } else {                        //don't put set direction to down here
+        alienArray[i] += width
+      }
+    }
+    showAliensMoving()
+  }
+
+  // ----- check if the alien is at the edge of the screen ---------
+  function checkEdgeOfscreen(){
+    alienArray.forEach((elem)=>{
+      if((elem+1)%width === 0){
+        changeDirection = true
+      }if (elem%width === 0) {
+        changeDirection = true
+        direction = 'left'
+      }
+    })
+  }
+  // starts the aliens moving and should be refered back to to change direction
+  function gameLoop() {
+    setInterval(function() {
+      if(changeDirection){               //starts as false so these if options are skipped
+        moveAlien('down')
+        if(direction ==='left'){
+          direction ='right'
+        }else{
+          direction ='left'
+        }
+        changeDirection = false
+      }else{
+        moveAlien(direction)        //this starts the directions. it is set to 'right' at the top intiially
+        checkEdgeOfscreen()                //this check alien boundaries and see whether to change direction
+        // endgameWin()
+      }
     }, 1000)
   }
 
-  makeRowMoves('right')
+
+
+
+
+  createRow(0)
+  createRow(10)
+  gameLoop()
+
+
+
+
+  console.log(alienArray)
+
+
 
 })
