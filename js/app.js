@@ -3,7 +3,7 @@ $(() => {
   const width = 20
   const $playerScore = $('.playerScore')
   let playerIndex = 388
-  let aliensInRow = 10
+  const aliensInRow = 10
   let direction = 'right'
   let changeDirection = false
   let deadAlienIndex
@@ -11,7 +11,6 @@ $(() => {
   let alienMovingTimer
   let gameOver = false
   let score = 0
-  let missileInterval
   const $winOrLoss = $('.winOrLoss')
 
   //------------- create 10 x 10 grid divs ---------------
@@ -57,7 +56,7 @@ $(() => {
 
     let shootingIndex = playerIndex
 
-    missileInterval = setInterval(() => {
+    const missileInterval = setInterval(() => {
       // The missile on row above
       $divs.eq(shootingIndex + missileIndex).addClass('missile')
       // remove its current position
@@ -67,23 +66,21 @@ $(() => {
       // when the missile hits the alien remove the aliens
       if($divs.eq(shootingIndex).hasClass('aliens')){
         deadAlienIndex = shootingIndex
+        //increment score by 20 if user hits an alien
+        updateScore()
         //remove aliens from div/grid hit my missle
         $divs.eq(shootingIndex).removeClass('aliens')
         $divs.eq(shootingIndex).removeClass('missile')
         //remove aliens from array hit my missle
         handleDeadAlien(deadAlienIndex)
-        //increment score by 20 if user hits an alien
-        updateScore()
-        // clearInterval(missileInterval)
-
-      }
-      // if the missile is at top or below divs/grid
-      if (shootingIndex<0 || shootingIndex>400){
-          // remove missile
-        $divs.eq(shootingIndex).removeClass('missile')
-        // stop missile interval
-
         clearInterval(missileInterval)
+      }
+      // if the missile is at top
+      if (shootingIndex<0 || shootingIndex>400){
+        // stop missile interval
+        clearInterval(missileInterval)
+        // remove missile
+        $divs.eq(shootingIndex).removeClass('missile')
       }
     }, 100)
   }
@@ -97,7 +94,7 @@ $(() => {
   // -------------- add aliens on top row   ------------------------
 
   //push alien to an array
-  function displayAlienrow(startIndex){
+  function createRow(startIndex){
     for (let i = 0; i < aliensInRow; i++) {
       $divs[startIndex].classList.add('aliens')
       alienArray.push(startIndex)
@@ -175,7 +172,7 @@ $(() => {
   function checkWinGame(){
     //if arr is empty you win
     if(alienArray.length === 0){
-      $winOrLoss.Text('you Win')
+      $winOrLoss.text('You Won')
     }
   }
 
@@ -184,8 +181,8 @@ $(() => {
     alienArray.forEach((elem) => {
       if(elem > width*width - width){
         // user lose
-        $winOrLoss.Text('you Lose')
         endGame()
+        $winOrLoss.text('You Lose')
       }
     })
   }
@@ -201,9 +198,9 @@ $(() => {
     clearInterval(alienMovingTimer)
   }
 
-  displayAlienrow(0)
-  displayAlienrow(20)
-  displayAlienrow(40)
+  createRow(0)
+  createRow(20)
+  createRow(40)
 
   gameLoop()
 
