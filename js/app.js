@@ -1,6 +1,7 @@
 $(() => {
   const $grid = $('.grid')
   let playerIndex = 95
+  const width = 10
 
   //------------- create 10 x 10 grid divs ---------------
 
@@ -25,22 +26,22 @@ $(() => {
     $divs.eq(playerIndex).removeClass('player')
     //move player left 37
     switch(e.keyCode) {
-      case 37: if(playerIndex % 10 > 0)
+      case 37: if(playerIndex % width  > 0)
         playerIndex--
         break
         // move player right 39
-      case 39: if(playerIndex % 10 < 9)
+      case 39: if(playerIndex % width  < 9)
         playerIndex++
         break
-        // fire at space bar
+        // fire on space bar press
       case 32:
-        console.log('FIRED at ' + playerIndex)
-        moveMissile(playerIndex, -10)
+        moveMissile(playerIndex, -width )
     }
     movePlayer()
   })
 
-  // -------- draw Missile function ----------
+  // -------- move Missile function ----------
+  let deadAlienIndex
 
   function moveMissile(playerIndex, missileIndex){
 
@@ -56,46 +57,51 @@ $(() => {
       // when the missile hits the alien remove the aliens
       if($divs.eq(shootingIndex).hasClass('aliens')){
         $divs.eq(shootingIndex).removeClass('aliens')
+        deadAlienIndex = shootingIndex
+        console.log(` dead alien index is ${deadAlienIndex}`)
       }
       // if the missile is at top
       if (shootingIndex<0 || shootingIndex>100){
         // stop missile interval
         clearInterval(missileInterval)
-        // remove missile 
+        // remove missile
         $divs.eq(shootingIndex).removeClass('missile')
       }
     }, 100)
   }
 
+
   // -------------- add aliens on top row   ------------------------
 
+  let currentAliensIndex = 0
   // adds 8 aliens to the top row
-  function stepAliens(offset, startValue) {
-    // offset is initially 0 and then icrements in 10s,
+  function stepAliens(currentAliensIndex, startValue) {
+    // currentAliensIndex is initially 0 and ...
+    // then icrements in 10s which moves the aliens down a row,
     for(let i = 0; i <= 9; i++){
-      // remove aliens on index 0 & 1 then remove aliens on index 9 & 8
+      // remove aliens on index 0 then 1 when they move right
+      // remove aliens on index 9 & 8 when they move to left
       if (i < startValue || i > startValue + 7) {
-        $divs.eq(i + offset).removeClass('aliens')
+        $divs.eq(i + currentAliensIndex).removeClass('aliens')
       } else {
-        $divs.eq(i + offset).addClass('aliens')
+        $divs.eq(i + currentAliensIndex).addClass('aliens')
       }
     }
   }
 
   // remove previous row of aliens
-  function removeAliens(offset) {
+  function removeAliens(currentAliensIndex) {
     for(let i = 0; i <=9; i++){
-      $divs.eq(i + offset).removeClass('aliens')
+      $divs.eq(i + currentAliensIndex).removeClass('aliens')
     }
-    // }
   }
 
-  //-------------- moves aliens on the row to right & left ---------------
+  //-------------- moves aliens on the row to right & then to left ---------------
 
-  let currentAliensIndex = 0
   // const moveAliens = [0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0]
 
-  const makeRowMoves =((direction) => {
+  function makeRowMoves (direction) {
+
     let startIndexes
     let rowMoveCount = 0
     const rightMoves = [0,1,2]
@@ -114,42 +120,33 @@ $(() => {
     stepAliens(currentAliensIndex, startIndexes[rowMoveCount])
     rowMoveCount ++
 
-//------------------ move aliens down a row ------------------
+    //------------------ move aliens down a row ------------------
 
     const interval = setInterval(() => {
+      // if the aliens reaches edge of the grid row is 3
       if (rowMoveCount === 3) {
-        //move down a row
-        currentAliensIndex = currentAliensIndex + 10
+        //move aiens down a row if aliens reaches rowMoveCount 3
+        currentAliensIndex = currentAliensIndex + width
 
         if (direction === 'right') {
           makeRowMoves('left')
           //remove aliens on the row above
-          removeAliens(currentAliensIndex -10)
+          removeAliens(currentAliensIndex -width)
         }
 
         if(direction === 'left') {
           makeRowMoves('right')
-          removeAliens(currentAliensIndex -10)
+          removeAliens(currentAliensIndex -width)
         }
         clearInterval(interval)
         return
       }
+
       stepAliens(currentAliensIndex, startIndexes[rowMoveCount])
       rowMoveCount ++
     }, 1000)
-  })
+  }
 
   makeRowMoves('right')
 
-
-  // const aliensGoDown = setInterval(() => {
-  //   stepAliens(currentAliensIndex, moveAliens[startValue])
-  //   startValue ++
-  //   if ((startValue) % 3 === 0) {
-  //     currentAliensIndex = currentAliensIndex + 10
-  //     //step add aliens curr index - 20
-  //   }
-  // }, 1000)
-  //
-  // aliensGoDown()
 })
