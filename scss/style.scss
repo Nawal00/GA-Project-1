@@ -4,8 +4,7 @@
 
 body {
   align-items: center;
-
-  height: 100vh;
+  height: 800px;
   justify-content: center;
   margin: 0;
   background-image: url("../images/background.png");
@@ -69,4 +68,8 @@ body {
   background-image: url("../images/missile1.png");
   background-repeat: no-repeat;
   background-position: center;
+}
+
+.alienBomb{
+  background: red;
 }

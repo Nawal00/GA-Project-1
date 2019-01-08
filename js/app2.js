@@ -158,3 +158,30 @@ function createAliens(aliensIndex, className) {
   // makeRowMoves('right')
 
 })
+
+
+  let alienIndex
+  function handleAlienBomb(alienshotIndex, alienBomb){
+
+    // const bombInterval =
+    // setInterval(() => {
+
+      for (let i=0; i < alienArray.length; i++) {
+        const rng = Math.floor(Math.random()*alienArray.length)
+        alienIndex = alienArray[rng]
+        console.log(alienIndex)
+      }
+
+      let alienShootingIndex = alienIndex
+}
+  //     $divs.eq(alienIndex + alienBomb).addClass('alienBomb')
+  //     // remove its current position
+  //     $divs.eq(alienIndex).removeClass('alienBomb')
+  //     // current position is reassigned to new position
+  //     alienIndex += width
+  //     // when the missile hits the alien remove the aliens
+  //
+  //     // clearInterval(bombInterval)
+  //   },100)
+  // }
+  handleAlienBomb(alienIndex, + width)

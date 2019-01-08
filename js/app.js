@@ -1,9 +1,11 @@
 $(() => {
   const $grid = $('.grid')
-  const width = 20
   const $playerScore = $('.playerScore')
-  let playerIndex = 388
+  const $winOrLoss = $('.winOrLoss')
+  const $level = $('.levels')
+  const width = 20
   const aliensInRow = 10
+  let playerIndex = 388
   let direction = 'right'
   let changeDirection = false
   let deadAlienIndex
@@ -11,7 +13,7 @@ $(() => {
   let alienMovingTimer
   let gameOver = false
   let score = 0
-  const $winOrLoss = $('.winOrLoss')
+  let level = 1
 
   //------------- create 10 x 10 grid divs ---------------
   for(let i = 0; i < width * width; i++) {
@@ -51,6 +53,7 @@ $(() => {
 
   function moveMissile(playerIndex, missileIndex){
 
+    //starting point of shooting index is same as players
     let shootingIndex = playerIndex
 
     const missileInterval = setInterval(() => {
@@ -87,6 +90,16 @@ $(() => {
     alienArray = alienArray.filter(element =>  element !== deadAlienIndex)
     console.log(alienArray)
   }
+
+  //-------------- Alien ----------
+  let alienIndex
+  for (let i=0; i < alienArray.length; i++) {
+    const rng = Math.floor(Math.random()*alienArray.length)
+    alienIndex = alienArray[rng]
+    console.log(alienIndex)
+  }
+
+
 
   // -------------- add aliens on top row   ------------------------
 
@@ -146,7 +159,8 @@ $(() => {
       }
     })
   }
-  // starts the aliens moving and should be refered back to to change direction
+
+// game loop to move aliens, check EdgeOfscreen, win and lose condition
   function gameLoop() {
     alienMovingTimer = setInterval(function() {
       if(changeDirection){               //starts as false so these if options are skipped
@@ -170,13 +184,16 @@ $(() => {
     //if arr is empty you win
     if(alienArray.length === 0){
       $winOrLoss.text('You Won')
+      level++
+      endGame()
+      newGame()
     }
   }
 
   function checkLoseGame(){
     //if alien arr is on the last row,
     alienArray.forEach((elem) => {
-      if(elem > width*width - width){
+      if(elem >= width*width - width){
         // user lose
         endGame()
         $winOrLoss.text('You Lose')
@@ -184,31 +201,44 @@ $(() => {
     })
   }
 
-// update score
+  // update score
   function updateScore() {
     score += 20
     $playerScore.text(score)
   }
 
-// engd game func to stop alien moving
+  // end game func to stop alien moving
   function endGame(){
     clearInterval(alienMovingTimer)
   }
 
-  function init(){
+  //new game for new level
+  function newGame(){
+    $level.text(level)
     createRow(0)
     createRow(20)
     createRow(40)
+    createRow(60)
+    createRow(80)
     gameLoop()
-    for(let i = 0; i < width * width; i++) {
-      $grid.append($('<div>', '</div>'))
-    const $grid = $('.grid')
-    const $playerScore = $('.playerScore')
-    const $winOrLoss = $('.winOrLoss')
-    let playerIndex = 388
-    }
+    checkLoseGame()
   }
 
+
+  //initialise game
+  function init(){
+    createRow(0)
+    createRow(20)
+    gameLoop()
+  //   for(let i = 0; i < width * width; i++) {
+  //     $grid.append($('<div>', '</div>'))
+  //   const $grid = $('.grid')
+  //   const $playerScore = $('.playerScore')
+  //   const $winOrLoss = $('.winOrLoss')
+  //   let playerIndex = 388
+  //   }
+  }
+  //
   init()
 
 })
