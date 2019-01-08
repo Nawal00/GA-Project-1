@@ -14,6 +14,7 @@ $(() => {
   let gameOver = false
   let score = 0
   let level = 1
+  let delay = 500
 
   //------------- create 10 x 10 grid divs ---------------
   for(let i = 0; i < width * width; i++) {
@@ -52,11 +53,10 @@ $(() => {
   // -------- move Missile function ----------
 
   function moveMissile(playerIndex, missileIndex){
-
-    //starting point of shooting index is same as players
+    //starting position of shooting index is same as player
     let shootingIndex = playerIndex
 
-    const missileInterval = setInterval(() => {
+    const missleInt = setInterval(() => {
       // The missile on row above
       $divs.eq(shootingIndex + missileIndex).addClass('missile')
       // remove its current position
@@ -73,12 +73,12 @@ $(() => {
         $divs.eq(shootingIndex).removeClass('missile')
         //remove aliens from array hit my missle
         handleDeadAlien(deadAlienIndex)
-        clearInterval(missileInterval)
+        clearInterval(missleInt)
       }
       // if the missile is at top
       if (shootingIndex<0 || shootingIndex>400){
         // stop missile interval
-        clearInterval(missileInterval)
+        clearInterval(missleInt)
         // remove missile
         $divs.eq(shootingIndex).removeClass('missile')
       }
@@ -90,15 +90,6 @@ $(() => {
     alienArray = alienArray.filter(element =>  element !== deadAlienIndex)
     console.log(alienArray)
   }
-
-  //-------------- Alien ----------
-  let alienIndex
-  for (let i=0; i < alienArray.length; i++) {
-    const rng = Math.floor(Math.random()*alienArray.length)
-    alienIndex = alienArray[rng]
-    console.log(alienIndex)
-  }
-
 
 
   // -------------- add aliens on top row   ------------------------
@@ -160,7 +151,7 @@ $(() => {
     })
   }
 
-// game loop to move aliens, check EdgeOfscreen, win and lose condition
+  // game loop to move aliens, check EdgeOfscreen, win and lose condition
   function gameLoop() {
     alienMovingTimer = setInterval(function() {
       if(changeDirection){               //starts as false so these if options are skipped
@@ -176,8 +167,9 @@ $(() => {
         checkEdgeOfscreen()
         checkLoseGame()
         checkWinGame()
+        delayFire()
       }
-    }, 500)
+    }, delay)
   }
 
   function checkWinGame(){
@@ -230,15 +222,56 @@ $(() => {
     createRow(0)
     createRow(20)
     gameLoop()
-  //   for(let i = 0; i < width * width; i++) {
-  //     $grid.append($('<div>', '</div>'))
-  //   const $grid = $('.grid')
-  //   const $playerScore = $('.playerScore')
-  //   const $winOrLoss = $('.winOrLoss')
-  //   let playerIndex = 388
-  //   }
+    const $grid = $('.grid')
+    // for(let i = 0; i < width * width; i++) {
+    //   $grid.append($('<div>', '</div>'))
+    // }
+    const $playerScore = $('.playerScore')
+    const $winOrLoss = $('.winOrLoss')
+    let playerIndex = 388
   }
-  //
+
   init()
+
+  //-------------- alien shot -------------
+
+
+  let alienShotIndex
+
+  function moveAlienMissile(alienIndex, missileIndex){
+
+    const rng = Math.floor((Math.random() * (alienArray.length)))
+    alienShotIndex =  alienArray[rng]
+    console.log(alienShotIndex)
+
+    const alienMissileInterval = setInterval(() => {
+      // The missile on row above
+      $divs.eq(alienIndex + missileIndex).addClass('alienBomb')
+      // remove its current position
+      $divs.eq(alienIndex).removeClass('alienBomb')
+      // current position is reassigned to new position
+      alienIndex += missileIndex
+      // when the missile hits the alien remove the aliens
+      if($divs.eq(alienIndex).hasClass('player')){
+        //decrease lives if the alien hits the player
+        $divs.eq(alienIndex).removeClass('missile')
+
+      }
+      // if the missile is
+      if ( missileIndex < 0 || missileIndex > width*width){
+        // stop missile interval
+        clearInterval(alienMissileInterval)
+        // remove missile
+        $divs.eq(alienIndex).removeClass('alienBomb')
+      }
+    }, 100)
+  }
+
+  function delayFire() {
+    const random = Math.random()
+    if (random < 0.5) moveAlienMissile(alienShotIndex, +width)
+  }
+
+
 
 })
