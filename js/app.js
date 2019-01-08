@@ -3,18 +3,22 @@ $(() => {
   const $playerScore = $('.playerScore')
   const $winOrLoss = $('.winOrLoss')
   const $level = $('.levels')
+  const $startScreen = $('.startScreen')
+  const $playBtn = $('.playBtn')
+  const $lives = $('.lives')
   const width = 20
   const aliensInRow = 10
   let playerIndex = 388
   let direction = 'right'
   let changeDirection = false
-  let deadAlienIndex
   let alienArray = []
   let alienMovingTimer
   let gameOver = false
   let score = 0
   let level = 1
   let delay = 500
+  let deadAlienIndex
+  let livesLeft = 3
 
   //------------- create 10 x 10 grid divs ---------------
   for(let i = 0; i < width * width; i++) {
@@ -66,6 +70,8 @@ $(() => {
       // when the missile hits the alien remove the aliens
       if($divs.eq(shootingIndex).hasClass('aliens')){
         deadAlienIndex = shootingIndex
+        console.log(deadAlienIndex)
+
         //increment score by 20 if user hits an alien
         updateScore()
         //remove aliens from div/grid hit my missle
@@ -79,8 +85,37 @@ $(() => {
       if (shootingIndex<0 || shootingIndex>400){
         // stop missile interval
         clearInterval(missleInt)
-        // remove missile
+        // remove missiles
         $divs.eq(shootingIndex).removeClass('missile')
+      }
+    }, 100)
+  }
+
+  let alienShotIndex
+
+  function moveAlienMissile(alienIndex, alienBombIndex){
+
+    const rng = Math.floor((Math.random() * (alienArray.length-1)))
+    alienShotIndex =  alienArray[rng]
+
+    const alienMissileInterval = setInterval(() => {
+      // The missile on row above
+      $divs.eq(alienIndex + alienBombIndex).addClass('alienBomb')
+      // remove its current position
+      $divs.eq(alienIndex).removeClass('alienBomb')
+      // current position is reassigned to new position
+      alienIndex += alienBombIndex
+      // when the missile hits the alien remove the aliens
+      if($divs.eq(alienIndex).hasClass('player')){
+        //decrease player lives if the alien hits the player
+        playerLives()
+      }
+      // if the missile is
+      if ( alienBombIndex > width*width){
+        // stop missile interval
+        clearInterval(alienMissileInterval)
+        // remove missile
+        $divs.eq(alienIndex).removeClass('alienBomb')
       }
     }, 100)
   }
@@ -91,7 +126,6 @@ $(() => {
     console.log(alienArray)
   }
 
-
   // -------------- add aliens on top row   ------------------------
 
   //push alien to an array
@@ -100,16 +134,6 @@ $(() => {
       $divs[startIndex].classList.add('aliens')
       alienArray.push(startIndex)
       startIndex ++
-    }
-  }
-
-  //move aliens inside the array
-  function moveAliens(){
-    let previousIndex
-
-    for (let i = 0; i < alienArray.length; i++) {
-      previousIndex = alienArray[i]
-      alienArray[i] += 1
     }
   }
 
@@ -153,6 +177,9 @@ $(() => {
 
   // game loop to move aliens, check EdgeOfscreen, win and lose condition
   function gameLoop() {
+    hideScreen()
+    createRow(0)
+    createRow(20)
     alienMovingTimer = setInterval(function() {
       if(changeDirection){               //starts as false so these if options are skipped
         alienDirection('down')
@@ -167,18 +194,19 @@ $(() => {
         checkEdgeOfscreen()
         checkLoseGame()
         checkWinGame()
-        delayFire()
+        moveAlienMissile(alienShotIndex, +width)
       }
     }, delay)
   }
 
+  // check win function
   function checkWinGame(){
     //if arr is empty you win
     if(alienArray.length === 0){
       $winOrLoss.text('You Won')
       level++
       endGame()
-      newGame()
+      // newGame()
     }
   }
 
@@ -198,10 +226,19 @@ $(() => {
     score += 20
     $playerScore.text(score)
   }
+  // update score
+  function playerLives() {
+    livesLeft --
+    $lives.text(livesLeft)
+    endGame()
+  }
 
   // end game func to stop alien moving
   function endGame(){
-    clearInterval(alienMovingTimer)
+    if(livesLeft === 0){
+      $winOrLoss.text('Game Over')
+      clearInterval(alienMovingTimer)
+    }
   }
 
   //new game for new level
@@ -216,61 +253,35 @@ $(() => {
     checkLoseGame()
   }
 
-
-  //initialise game
-  function init(){
-    createRow(0)
-    createRow(20)
-    gameLoop()
-    const $grid = $('.grid')
-    // for(let i = 0; i < width * width; i++) {
-    //   $grid.append($('<div>', '</div>'))
-    // }
-    const $playerScore = $('.playerScore')
-    const $winOrLoss = $('.winOrLoss')
-    let playerIndex = 388
+  // hide start screen function
+  function hideScreen(){
+    $startScreen.css('display','none')
   }
 
-  init()
+  // when play button is click run gameLoop func
+  $playBtn.on('click', gameLoop)
+
+  //initialise game
+  // function init(){
+  //
+  //   // gameLoop()
+  //   const $grid = $('.grid')
+  //   const $playerScore = $('.playerScore')
+  //   const $winOrLoss = $('.winOrLoss')
+  //   let playerIndex = 388
+  // }
+  //
+  // init()
 
   //-------------- alien shot -------------
 
 
-  let alienShotIndex
 
-  function moveAlienMissile(alienIndex, missileIndex){
 
-    const rng = Math.floor((Math.random() * (alienArray.length)))
-    alienShotIndex =  alienArray[rng]
-    console.log(alienShotIndex)
-
-    const alienMissileInterval = setInterval(() => {
-      // The missile on row above
-      $divs.eq(alienIndex + missileIndex).addClass('alienBomb')
-      // remove its current position
-      $divs.eq(alienIndex).removeClass('alienBomb')
-      // current position is reassigned to new position
-      alienIndex += missileIndex
-      // when the missile hits the alien remove the aliens
-      if($divs.eq(alienIndex).hasClass('player')){
-        //decrease lives if the alien hits the player
-        $divs.eq(alienIndex).removeClass('missile')
-
-      }
-      // if the missile is
-      if ( missileIndex < 0 || missileIndex > width*width){
-        // stop missile interval
-        clearInterval(alienMissileInterval)
-        // remove missile
-        $divs.eq(alienIndex).removeClass('alienBomb')
-      }
-    }, 100)
-  }
-
-  function delayFire() {
-    const random = Math.random()
-    if (random < 0.5) moveAlienMissile(alienShotIndex, +width)
-  }
+  // function delayFire() {
+  //   const random = Math.random()
+  //   if (random < 0.5)
+  // }
 
 
 
