@@ -14,13 +14,11 @@ $(() => {
   const $winOrLoss = $('.winOrLoss')
 
   //------------- create 10 x 10 grid divs ---------------
-
   for(let i = 0; i < width * width; i++) {
     $grid.append($('<div>', '</div>'))
   }
 
   //---------- place the player at the bottom of the grid --------
-
   const $divs = $('.grid div')
   $divs.eq(playerIndex).addClass('player')
 
@@ -30,7 +28,6 @@ $(() => {
   }
 
   // ------------- Handle plapyer events ----------------
-
   $(document).on('keydown', e => {
 
     $divs.eq(playerIndex).removeClass('player')
@@ -198,12 +195,20 @@ $(() => {
     clearInterval(alienMovingTimer)
   }
 
-  createRow(0)
-  createRow(20)
-  createRow(40)
+  function init(){
+    createRow(0)
+    createRow(20)
+    createRow(40)
+    gameLoop()
+    for(let i = 0; i < width * width; i++) {
+      $grid.append($('<div>', '</div>'))
+    const $grid = $('.grid')
+    const $playerScore = $('.playerScore')
+    const $winOrLoss = $('.winOrLoss')
+    let playerIndex = 388
+    }
+  }
 
-  gameLoop()
-
-  console.log(alienArray)
+  init()
 
 })
