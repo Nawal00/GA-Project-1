@@ -4,7 +4,9 @@ $(() => {
   const $winOrLoss = $('.winOrLoss')
   const $level = $('.levels')
   const $startScreen = $('.startScreen')
+  const $h1 = $startScreen.find('h1')
   const $playBtn = $('.playBtn')
+  const $resetBtn = $('.resetBtn')
   const $lives = $('.lives')
   const width = 20
   const aliensInRow = 10
@@ -13,20 +15,13 @@ $(() => {
   let changeDirection = false
   let alienArray = []
   let alienMovingTimer
-  let gameOver = false
   let score = 0
   let level = 1
   let alienMovement = 500
   let deadAlienIndex
   let livesLeft = 3
   let alienShotIndex
-  let   $divs
-
-  //------------- create 10 x 10 grid divs ---------------
-
-
-  //---------- place the player at the bottom of the grid --------
-
+  let $divs
 
   // --------- function to move player -----------
   function movePlayer() {
@@ -69,7 +64,6 @@ $(() => {
       // when the missile hits the alien remove the aliens
       if($divs.eq(shootingIndex).hasClass('aliens')){
         deadAlienIndex = shootingIndex
-
         //increment score by 20 if user hits an alien
         updateScore()
         //remove aliens from div/grid hit my missle
@@ -132,7 +126,6 @@ $(() => {
       alienArray.push(startIndex)
       startIndex ++
     }
-    console.log(alienArray)
   }
 
   //show Alien
@@ -143,9 +136,7 @@ $(() => {
         $divs[index].classList.remove('aliens')
       }
     })
-    console.log(alienArray)
     alienArray.forEach(index => {
-      console.log(index)
       $divs[index].classList.add('aliens')
     })
   }
@@ -181,6 +172,7 @@ $(() => {
     hideScreen()
     createRow(5)
     createRow(25)
+    createRow(45)
     alienMovingTimer = setInterval(function() {
       if(changeDirection){               //starts as false so these if options are skipped
         alienDirection('down')
@@ -196,7 +188,6 @@ $(() => {
         moveAlienMissile(alienShotIndex, +width)
         checkLoseGame()
         checkWinGame()
-        // newGame()
       }
     }, alienMovement)
   }
@@ -211,13 +202,16 @@ $(() => {
     checkLoseGame()
     checkWinGame()
     gameLoop()
+    alienMovement -= 100
   }
 
+  // win game condition
   function checkWinGame() {
     if(alienArray.length === 0){
       $winOrLoss.text('Cleared Level')
       level++
       clearInterval(alienMovingTimer)
+      // if alien wave is cleared start new game
       newGame()
     }
   }
@@ -228,7 +222,8 @@ $(() => {
     if (livesLeft === 0){
       $winOrLoss.text('Game Over')
       clearInterval(alienMovingTimer)
-    }else{
+      stop()
+    }  else{
       //if alien arr is on the last row,
       alienArray.forEach((elem) => {
         if(elem >= width*width - width){
@@ -251,16 +246,28 @@ $(() => {
     $lives.text(livesLeft)
   }
 
-  // end game func to stop alien moving
-  // function endGame(){
-  //   if (livesLeft === 0){
-  //     $winOrLoss.text('Game Over')
-  //     clearInterval(alienMovingTimer)
-  //   } else
-  //     clearInterval(alienMovingTimer)
-  // }
+  function stop(){
+    clearInterval(alienMovingTimer)
+    $startScreen.css('display', 'flex')
+    $playBtn.hide()
+    $h1.text(`Game Over, You Scored ${score}`)
+    $playerScore.text(score)
+    $lives.text(livesLeft)
+    $level.text(level)
+  }
 
-  //new game for new level
+  function reset(){
+    score = 0
+    livesLeft = 3
+    level = 1
+    alienArray =[]
+    $playerScore.text(score)
+    $lives.text(livesLeft)
+    $level.text(level)
+    gameLoop()
+  }
+
+  $resetBtn.on('click', reset)
 
   // hide start screen function
   function hideScreen(){
@@ -278,12 +285,9 @@ $(() => {
     }
     $divs = $('.grid div')
     $divs.eq(playerIndex).addClass('player')
-
   }
 
   init()
-
-
 
 })
 
