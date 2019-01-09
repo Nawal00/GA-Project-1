@@ -19,6 +19,7 @@ $(() => {
   let delay = 500
   let deadAlienIndex
   let livesLeft = 3
+  let alienShotIndex
 
   //------------- create 10 x 10 grid divs ---------------
   for(let i = 0; i < width * width; i++) {
@@ -91,7 +92,7 @@ $(() => {
     }, 100)
   }
 
-  let alienShotIndex
+
 
   function moveAlienMissile(alienIndex, alienBombIndex){
 
@@ -177,7 +178,6 @@ $(() => {
 
   // game loop to move aliens, check EdgeOfscreen, win and lose condition
   function gameLoop() {
-    hideScreen()
     createRow(0)
     createRow(20)
     alienMovingTimer = setInterval(function() {
@@ -203,20 +203,25 @@ $(() => {
   function checkWinGame(){
     //if arr is empty you win
     if(alienArray.length === 0){
-      $winOrLoss.text('You Won')
+      $winOrLoss.text('Cleared Level')
       level++
       endGame()
-      // newGame()
+      newGame()
     }
   }
 
+  //check lose condition
   function checkLoseGame(){
     //if alien arr is on the last row,
     alienArray.forEach((elem) => {
-      if(elem >= width*width - width){
+      if(elem >= width*width - (width -1)){
         // user lose
         endGame()
         $winOrLoss.text('You Lose')
+      }
+      if (livesLeft === 0){
+        $winOrLoss.text('Game Over')
+        endGame()
       }
     })
   }
@@ -230,15 +235,11 @@ $(() => {
   function playerLives() {
     livesLeft --
     $lives.text(livesLeft)
-    endGame()
   }
 
   // end game func to stop alien moving
   function endGame(){
-    if(livesLeft === 0){
-      $winOrLoss.text('Game Over')
-      clearInterval(alienMovingTimer)
-    }
+    clearInterval(alienMovingTimer)
   }
 
   //new game for new level
@@ -250,6 +251,7 @@ $(() => {
     createRow(60)
     createRow(80)
     gameLoop()
+    checkWinGame()
     checkLoseGame()
   }
 
@@ -258,19 +260,20 @@ $(() => {
     $startScreen.css('display','none')
   }
 
-  // when play button is click run gameLoop func
-  $playBtn.on('click', gameLoop)
+  // when play button is clicked run init func
+  $playBtn.on('click', init)
 
   //initialise game
-  // function init(){
-  //
-  //   // gameLoop()
-  //   const $grid = $('.grid')
-  //   const $playerScore = $('.playerScore')
-  //   const $winOrLoss = $('.winOrLoss')
-  //   let playerIndex = 388
-  // }
-  //
+  function init(){
+    hideScreen()
+    gameLoop()
+    const $grid = $('.grid')
+    const $playerScore = $('.playerScore')
+    const $winOrLoss = $('.winOrLoss')
+    let playerIndex = 388
+
+  }
+
   // init()
 
   //-------------- alien shot -------------
