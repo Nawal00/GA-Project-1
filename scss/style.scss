@@ -87,6 +87,19 @@ body {
   margin: 0;
 }
 
+// .levelUpScreen{
+//   background: transparent;
+//   border: 1px solid white;
+//   display: flex;
+//   flex-direction: column;
+//   align-items: center;
+//   justify-content: center;
+//   width: 30vw;
+//   height: 30vh;
+//   margin: auto;
+//   display: none;
+// }
+
 h1{
   font-size: 60px;
 }
@@ -104,6 +117,10 @@ button {
   margin: 100px 0px;
   padding: 20px;
   width: 300px;
+}
+
+img{
+  padding-left: 5px;
 }
 
 .resetBtn{
