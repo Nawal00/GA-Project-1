@@ -21,6 +21,7 @@ body {
   max-width: 700px;
   margin: auto;
   padding: 50px;
+  word-spacing: 15px;
 }
 
 .grid {
@@ -65,7 +66,7 @@ body {
 }
 
 .alienBomb{
-  background-image: url("../images/laser.png");
+  background-image: url("../images/explosionpng.png");
 }
 
 .startScreen{
@@ -86,6 +87,10 @@ body {
   margin: 0;
 }
 
+h1{
+  font-size: 60px;
+}
+
 button {
   font-family: 'Press Start 2P', cursive;
   color: #f00;
@@ -103,6 +108,11 @@ button {
 
 .resetBtn{
   display: none;
+}
+
+.lives img{
+  height: 20px;
+  width: 20px;
 }
 
 .grid div.explosive{

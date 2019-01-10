@@ -12,6 +12,8 @@ $(() => {
   const $lives = $('.lives')
   const width = 20
   const aliensInRow = 10
+  const audio = new Audio('./sounds/shoot.wav')
+  const alienDieAudio = new Audio('./sounds/invaderkilled.wav')
   let playerIndex = 388,
     direction = 'right',
     changeDirection = false,
@@ -24,8 +26,6 @@ $(() => {
     alienShotIndex,
     $divs,
     currentStep = 0
-
-
 
   // ------------- Handle player events & move player ----------------
   $(document).on('keydown', e => {
@@ -44,6 +44,7 @@ $(() => {
         // fire on space bar press
       case 32:
         moveMissile(playerIndex, -width )
+        audio.play()
     }
     $divs.eq(playerIndex).addClass('player')
   })
@@ -65,6 +66,7 @@ $(() => {
       // ------ when the missile hits the alien remove the aliens ---------
       if($divs.eq(shootingIndex).hasClass('aliens')){
         $divs.eq(shootingIndex).removeClass('aliens')
+        alienDieAudio.play()
         $divs.eq(shootingIndex).removeClass('missile')
         //remove aliens from array when hit by missle
         handleDeadAlien(shootingIndex)
@@ -122,7 +124,7 @@ $(() => {
         // remove missile
         $divs.eq(alienIndex).removeClass('alienBomb')
       }
-    }, 100)
+    }, 50)
   }
 
   // -------------- add aliens on top row   ------------------------
@@ -177,6 +179,7 @@ $(() => {
 
   // start game to move aliens, check EdgeOfscreen, win and lose condition, alien shooting
   function startGame() {
+    displayImagesLives()
     hideScreen()
     createRow(5)
     createRow(25)
@@ -196,6 +199,8 @@ $(() => {
         moveAlienMissile(alienShotIndex, +width)
         checkLoseGame()
         checkWinGame()
+
+
       }
     }, alienMovement)
   }
@@ -242,17 +247,23 @@ $(() => {
     score += 20
     $playerScore.text(score)
   }
+
   // update score
   function playerLives() {
     livesLeft --
-    $lives.text(livesLeft)
+    displayImagesLives()
   }
 
-  // for(let i = 0; i<= livesLeft; i ++){
-  //   $grid.append($('<img = >'))
-  // }
+
+  function displayImagesLives(){
+    $lives.empty()
+    for(let i = 0; i< livesLeft; i ++){
+      $lives.append($('<img src="images/ships.png" />'))
+    }
+  }
 
 
+// -------- end Game ----------
   function endGame(){
     clearInterval(alienMovingTimer)
     $startScreen.css('display', 'flex')
