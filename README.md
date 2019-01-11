@@ -15,7 +15,7 @@ Technologies used
 
 My Game - Space Invaders
 
-You can find a hosted version here ---->
+You can find a hosted version here ----> https://nawal00.github.io/Project-01-GA/
 
 Game overview
 
