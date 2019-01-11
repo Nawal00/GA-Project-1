@@ -42,6 +42,10 @@ Game Instructions
 
 <img width="1280" alt="screenshot 2019-01-11 at 10 46 03" src="https://user-images.githubusercontent.com/42609274/51029429-2d3ca800-158e-11e9-9d3e-cd1b61933b21.png">
 
-3. Scores are accumulated when the player hits the aliens with its laser. The hit alien will then explode and disappear from the screen. On the other hand, if the players gets hit by the the aliens then the players lives will decrement and the spaceship will explode. 
+3. Scores are accumulated when the player hits the aliens with its laser. The shot alien will then explode and disappear from the screen. On the other hand, if the players gets hit by the the aliens then the players lives will decrement and the spaceship will explode.
 
 <img width="1280" alt="screenshot 2019-01-11 at 11 13 40" src="https://user-images.githubusercontent.com/42609274/51030662-08e2ca80-1592-11e9-886e-27e82fca518a.png">
+
+4. If the player clears the wave of alien, the level will increment and display twice as many aliens as well as speed up their movements.
+
+<img width="1276" alt="screenshot 2019-01-11 at 11 25 2a7 1" src="https://user-images.githubusercontent.com/42609274/51031338-2749c580-1594-11e9-84fc-7eb3713d126f.png">
