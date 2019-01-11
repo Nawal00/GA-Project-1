@@ -229,9 +229,6 @@ $(() => {
       level++
       $level.text(level)
       livesLeft = 3
-      // $levelScreen
-      //   .css('display','flex')
-      //   .text(`Level ${level}`)
       clearInterval(alienMovingTimer)
       levelUp()
     }
@@ -314,21 +311,21 @@ $(() => {
   $resetBtn.on('click', reset)
 
   // function to call spritesheet
-  function explosive(shootingIndex) {
+  function explosive(shotIndex) {
 
     if(currentStep === 15){
       currentStep = 0
-      $divs.eq(shootingIndex).removeClass('explosive')
-      $divs.eq(shootingIndex).removeAttr('data-step', currentStep)
+      $divs.eq(shotIndex).removeClass('explosive')
+      $divs.eq(shotIndex).removeAttr('data-step', currentStep)
 
     } else{
       currentStep = currentStep + 1
 
-      $divs.eq(shootingIndex)
+      $divs.eq(shotIndex)
         .addClass('explosive')
         .attr('data-step', currentStep)
 
-      setTimeout(()=>explosive(shootingIndex), 13)
+      setTimeout(()=>explosive(shotIndex), 10)
     }
   }
 
