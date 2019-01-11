@@ -1,5 +1,5 @@
-**Project-01-GA**
-**JavaScript Game**
+# **Project-01-GA**
+# **JavaScript Game**
 
 
 **Project 1 : front-end game**
@@ -17,7 +17,7 @@
 
 You can find a hosted version here ----> https://nawal00.github.io/Project-01-GA/
 
-**Game overview**
+# **Game overview**
 
 Space Invaders is a classic arcade game from the 80s. The player can only move right and left and aims to shoot an invading alien armada, before it reaches the planet's surface using a mounted gun turret.
 
@@ -25,14 +25,14 @@ The aliens also move from left to right, and also down each time the reach the s
 
 Once the player has destroyed a wave of aliens, the game starts again. The aim is to achieve the highest score possible before either being destroyed by the aliens, or allowing them to reach the planet's surface.
 
-**Controls**
+# **Controls**
 
 * Spaceship movements: ← →  keys
 * Start game: "Start" button
 * Play again game: "Play Again" button
 * Shoot: "Space" key
 
-**Game Instructions**
+# **Game Instructions**
 
 **1.** The game begins with a start page introducing the aim of the game. The game is started by clicking on the "Start" button.
 
@@ -54,6 +54,6 @@ Once the player has destroyed a wave of aliens, the game starts again. The aim i
 
 <img width="1280" alt="screenshot 2019-01-11 at 11 38 31" src="https://user-images.githubusercontent.com/42609274/51031759-780dee00-1595-11e9-9712-5d7c10a45c53.png">
 
-**Process**
+# **Process**
 
 The main idea of this project was to create a game using basic grid layout so the spaceship is able to move left and right. This was created by a list of  (20 x 20) 'div's in the HTML. Each divs within the grid is an individual element. These cells are nestled within a container. The spaceship, aliens, laser and explosions were created by applying classes to the elements within the grid. When these elements are moved, their class is removed from the div of their current position and applied to the new div which will also be their new current position.
