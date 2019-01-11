@@ -46,6 +46,14 @@ Game Instructions
 
 <img width="1280" alt="screenshot 2019-01-11 at 11 13 40" src="https://user-images.githubusercontent.com/42609274/51030662-08e2ca80-1592-11e9-886e-27e82fca518a.png">
 
-4. If the player clears the wave of alien, the level will increment and display twice as many aliens as well as speed up their movements.
+4. If the player clears the wave of aliens, the level will increment and display twice as many aliens and speed up their movements.
 
 <img width="1276" alt="screenshot 2019-01-11 at 11 25 2a7 1" src="https://user-images.githubusercontent.com/42609274/51031338-2749c580-1594-11e9-84fc-7eb3713d126f.png">
+
+5. The game ends when the player runs out of lives or if the aliens reaches the same level as spaceship. Subsequently, the final score and the level is displayed.
+
+<img width="1280" alt="screenshot 2019-01-11 at 11 38 31" src="https://user-images.githubusercontent.com/42609274/51031759-780dee00-1595-11e9-9712-5d7c10a45c53.png">
+
+Process
+
+The main idea of this project was to create a game using basic grid layout so the player
