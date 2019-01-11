@@ -6,7 +6,6 @@ $(() => {
   const $startScreen = $('.startScreen')
   const $h1 = $startScreen.find('h1')
   const $p = $startScreen.find('p')
-  // const $levelScreen = $('.levelUpScreen')
   const $p2 = $('.scoreDisplay')
   const $playBtn = $('.playBtn')
   const $resetBtn = $('.resetBtn')
@@ -52,10 +51,66 @@ $(() => {
   })
 
 
+  // -------------- display aliens   ------------------------
+
+  //create aliens from given start index
+  function createRow(startIndex){
+    for (let i = 0; i < aliensInRow; i++) {
+      $divs[startIndex].classList.add('aliens')
+      // & push aliens into an array
+      alienArray.push(startIndex)
+      startIndex ++
+    }
+  }
+
+  //move aliens
+  function showAliensMoving(){
+    //loop through the divs
+    $divs.each(index => {
+      // find divs with aliens class
+      if($divs[index].classList.value === 'aliens'){
+        // & remove alien from the index
+        $divs[index].classList.remove('aliens')
+      }
+    })
+    //loop through the alienArray
+    alienArray.forEach(index => {
+      //add aliens from array to the divs
+      $divs[index].classList.add('aliens')
+    })
+  }
+
+  // ----- check if the alien is at the edge of the screen ---------
+  function checkEdgeOfscreen(){
+    alienArray.forEach((elem)=>{
+      if((elem+1)%width === 0){
+        changeDirection = true
+      }if (elem%width === 0) {
+        changeDirection = true
+      }
+    })
+  }
+
+  //change directions right left & down inside array
+  function alienDirection(direction) {
+    for (let i=0; i < alienArray.length; i++) {
+      if (direction === 'left') {
+        alienArray[i] --
+      } else if (direction === 'right') {
+        alienArray[i] ++
+      } else {
+        alienArray[i] += width
+      }
+    }
+    //& call aliens moving func to update the divs index classes
+    showAliensMoving()
+    moveAlienMissile(alienShotIndex, width)
+  }
+
   // -------- move Missile function ----------
 
   function moveMissile(shootingIndex, missileIndex){
-    //starting position of shooting index is same as playerIndex
+    //initial position of shooting index is same as playerIndex
 
     const missleInt = setInterval(() => {
       // The missile on row above
@@ -88,12 +143,10 @@ $(() => {
     }, 60)
   }
 
-
   // filter as in delete aliens at shootingIndex
   function handleDeadAlien(shootingIndex){
     alienArray = alienArray.filter(element =>  element !== shootingIndex)
   }
-
 
   // --------------- alien shoot -------------------------
   function moveAlienMissile(alienIndex, alienBombIndex){
@@ -125,64 +178,6 @@ $(() => {
         $divs.eq(alienIndex).removeClass('alienBomb')
       }
     }, 50)
-  }
-
-  // -------------- add aliens on top row   ------------------------
-
-  //create aliens from given start index
-  function createRow(startIndex){
-    for (let i = 0; i < aliensInRow; i++) {
-      $divs[startIndex].classList.add('aliens')
-      // & push aliens into an array
-      alienArray.push(startIndex)
-      startIndex ++
-    }
-  }
-
-  //move aliens
-  function showAliensMoving(){
-    //loop through the divs
-    $divs.each(index => {
-      // find divs with aliens class
-      if($divs[index].classList.value === 'aliens'){
-        // & remove alien from the index
-        $divs[index].classList.remove('aliens')
-      }
-    })
-    //loop through the alienArray
-    alienArray.forEach(index => {
-      //add aliens from array to the divs
-      $divs[index].classList.add('aliens')
-    })
-  }
-
-  //change directions right left & down inside array
-  function alienDirection(direction) {
-    for (let i=0; i < alienArray.length; i++) {
-      if (direction === 'left') {
-        alienArray[i] --
-      } else if (direction === 'right') {
-        alienArray[i] ++
-      } else {
-        alienArray[i] += width
-      }
-
-    }
-    //& call aliens moving func to update the divs index classes
-    showAliensMoving()
-    moveAlienMissile(alienShotIndex, width)
-
-  }
-
-  // ----- check if the alien is at the edge of the screen ---------
-  function checkEdgeOfscreen(){
-    alienArray.forEach((elem)=>{
-      if((elem+1)%width === 0){
-        changeDirection = true
-      }if (elem%width === 0) {
-        changeDirection = true
-      }
-    })
   }
 
   // start game to move aliens, check EdgeOfscreen, win and lose condition, alien shooting
@@ -217,7 +212,7 @@ $(() => {
     if(level === 2  ){
       createRow(65)
       createRow(85)
-    } else if (level === 3) {
+    } else {
       createRow(65)
       createRow(85)
       createRow(105)
@@ -317,7 +312,6 @@ $(() => {
 
   //reset game
   $resetBtn.on('click', reset)
-
 
   // function to call spritesheet
   function explosive(shootingIndex) {
