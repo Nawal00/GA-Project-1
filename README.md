@@ -4,6 +4,7 @@
 **Project 1**
 
 **Goal:** To create a single page game
+
 **Timeframe:** 7 days
 
 **Technologies used**
@@ -55,6 +56,14 @@ Once the player has destroyed a wave of aliens, the game starts again. The aim i
 
 # **Process**
 
-The main idea of this project was to create a game using basic grid layout so the spaceship is able to move left and right. This was created by a list of  (20 x 20) 'div's in the HTML. Each divs within the grid is an individual element. These cells are nestled within a container. The spaceship, aliens, laser and explosions were created by applying classes to the elements within the grid. When these elements are moved, their class is removed from the div of their current position and applied to the new div which will also be their new current position.
+The main idea of this project was to create a game using basic grid layout so the spaceship is able to move left and right. This was created by a list of  (20 x 20) 'div's in the HTML. Each divs within the grid is an individual element. These cells are nestled within a container. The spaceship, aliens, laser and explosions were created by applying classes to the elements within the grid. When these elements are moved, their class is also removed from the div of their current position and applied to the new div which becomes their new current position.
 
-Initially, I created the aliens in an array and displayed them on the grid by adding class aliens to the divs. Their movement patterns are created by moving the index of the aliens array with a for each loop and then passing the alines indexes on the the div index. 
+Initially, I created the aliens in an array and displayed them on the grid by adding class aliens to the divs. Their movement patterns are created by moving the index of the aliens array with a for each loop and then passing the alines indexes on the the div index.
+
+# **Challenges**
+
+
+
+# **Wins**
+
+# **Future Features**

@@ -1,187 +1,59 @@
-$(() => {
-  const $grid = $('.grid')
-  const width = 20
-  let playerIndex = 388
-  let alien = 10
+const $displayScore = $('.display-score')
+const players = $('.players')
+const playerScores = JSON.parse(localStorage.getItem('namescore'))
 
 
-  //------------- create 20 x 20 grid divs ---------------
+//-------------- display Highscore --------------------
 
-  for(let i = 0; i < width*width; i++) {
-    $grid.append($('<div>' + i + '</div>'))
+//add submit event listener to the form
+function addScore(e){
+  // stop page from reloading bc submit reloads the page by default
+  e.preventDefault()
+  // select and save the value of the form
+  const playerName = (this.querySelector('[name=playerName]')).value
+
+  const item = {
+    playerName: playerName,
+    playerScore: score
   }
-
-  //---------- place the player at the bottom of the grid --------
-
-  const $divs = $('.grid div')
-  $divs.eq(playerIndex).addClass('player')
-
-  // --------- function to move player -----------
-  function movePlayer() {
-    $divs.eq(playerIndex).addClass('player')
-  }
-
-  // ------------- Handle plapyer events ----------------
-
-  $(document).on('keydown', e => {
-
-    $divs.eq(playerIndex).removeClass('player')
-    //move player left 37
-    switch(e.keyCode) {
-      case 37: if(playerIndex %($divs.length- width))
-        playerIndex--
-        break
-        // move player right 39
-      case 39: if(playerIndex <($divs.length -1))
-        playerIndex++
-        break
-        // fire on space bar press
-      case 32:
-        moveMissile(playerIndex, -width )
-    }
-    movePlayer()
-  })
-
-  // -------- move Missile function ----------
-  let deadAlienIndex
-
-  function moveMissile(playerIndex, missileIndex){
-
-    let shootingIndex = playerIndex
-
-    const missileInterval = setInterval(() => {
-      // The missile on row above
-      $divs.eq(shootingIndex + missileIndex).addClass('missile')
-      // remove its current position
-      $divs.eq(shootingIndex).removeClass('missile')
-      // current position is reassigned to new position
-      shootingIndex += missileIndex
-      // when the missile hits the alien remove the aliens
-      if($divs.eq(shootingIndex).hasClass('aliens')){
-        $divs.eq(shootingIndex).removeClass('aliens')
-        deadAlienIndex = shootingIndex
-        console.log(` dead alien index is ${deadAlienIndex}`)
-      }
-      // if the missile is at top
-      if (shootingIndex<0 || shootingIndex>100){
-        // stop missile interval
-        clearInterval(missileInterval)
-        // remove missile
-        $divs.eq(shootingIndex).removeClass('missile')
-      }
-    }, 100)
-  }
-
-
-  // -------------- add aliens on top row   ------------------------
-
-
-// -------------- add aliens on top row   ------------------------
-let alienArr = []
-// adds 9 aliens to the top row
-function createAliens(aliensIndex, className) {
-  let aliensIndex = index
-
-  for(let i = 0; i<aliens; i++)
-    // remove aliens on index 0 then 1 when they move right
-    // remove aliens on index 9 & 8 when they move to left
-     alienArr.push(alienArr)
-
-    }
-
-  createAliens(0, 'aliens')
-
-
-
-
-
-
-  // // remove previous row of aliens
-  // function removeAliens(currentAliensIndex) {
-  //   for(let i = 0; i <=9; i++){
-  //     $divs.eq(i + currentAliensIndex).removeClass('aliens')
-  //   }
-  // }
-  //
-  // //-------------- moves aliens on the row to right & then to left ---------------
-  //
-  // // const moveAliens = [0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0,0,1,2,2,1,0]
-  //
-  // function makeRowMoves(direction) {
-  //
-  //   let startIndexes
-  //   let rowMoveCount = 0
-  //   const rightMoves = [0,1,2]
-  //   const leftMoves = [2,1,0]
-  //
-  //   if (direction === 'right') {
-  //     //aliens moves to right edge
-  //     startIndexes = rightMoves
-  //   }
-  //
-  //   if (direction === 'left') {
-  //     //aliens moves to left edge
-  //     startIndexes = leftMoves
-  //   }
-  //
-  //   stepAliens(currentAliensIndex, startIndexes[rowMoveCount])
-  //
-  //   rowMoveCount ++
-  //
-  //   //------------------ move aliens down a row ------------------
-  //
-  //   const interval = setInterval(() => {
-  //     // if the aliens reaches edge of the grid row is 3
-  //     if (rowMoveCount === 3) {
-  //       //move aiens down a row if aliens reaches rowMoveCount 3
-  //       currentAliensIndex = currentAliensIndex + width
-  //
-  //       if (direction === 'right') {
-  //         makeRowMoves('left')
-  //         //remove aliens on the row above
-  //         removeAliens(currentAliensIndex -width)
-  //       }
-  //
-  //       if(direction === 'left') {
-  //         makeRowMoves('right')
-  //         removeAliens(currentAliensIndex -width)
-  //       }
-  //       clearInterval(interval)
-  //       return
-  //     }
-  //
-  //     stepAliens(currentAliensIndex, startIndexes[rowMoveCount])
-  //     rowMoveCount ++
-  //   }, 1000)
-  // }
-  //
-  // makeRowMoves('right')
-
-})
-
-
-  let alienIndex
-  function handleAlienBomb(alienshotIndex, alienBomb){
-
-    // const bombInterval =
-    // setInterval(() => {
-
-      for (let i=0; i < alienArray.length; i++) {
-        const rng = Math.floor(Math.random()*alienArray.length)
-        alienIndex = alienArray[rng]
-        console.log(alienIndex)
-      }
-
-      let alienShootingIndex = alienIndex
+  //push item object to playerScores array
+  playerScores.push(item)
+  fillList(playerScores, players)
+  //on pageload we check if we have something on localStorage
+  //when you add a item you put it into localStorage
+  localStorage.setItem('namescore', JSON.stringify(playerScores))
+  this.reset()
 }
-  //     $divs.eq(alienIndex + alienBomb).addClass('alienBomb')
-  //     // remove its current position
-  //     $divs.eq(alienIndex).removeClass('alienBomb')
-  //     // current position is reassigned to new position
-  //     alienIndex += width
-  //     // when the missile hits the alien remove the aliens
-  //
-  //     // clearInterval(bombInterval)
-  //   },100)
-  // }
-  handleAlienBomb(alienIndex, + width)
+
+// func takes in array and html element where the returned value is shown
+function fillList(playerNameArray, playerList){
+  playerList.html(playerNameArray.map((playerName)=> {
+    return `
+    <li>
+      <label for=""> ${playerName.playerName} </label>
+      <label for=""> ${playerName.playerScore} </label>
+    </li>
+    `
+  }).join(''))
+}
+
+$displayScore.on('submit', addScore)
+
+fillList(playerScores, players)
+
+
+// <!-- <p class ="scoreDisplay"></p>
+//
+// <div class = "highScore">
+//   <h2> High Score </h2>
+//   <ul class="players">
+//
+//   </ul>
+//
+// <form class="display-score">
+//   <p> Save your score </p>
+//   <input type="text" name="playerName" placeholder="Name">
+//   <input type="submit" value="Add Score">
+// </form>
+//
+// </div> -->
