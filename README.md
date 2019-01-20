@@ -28,9 +28,10 @@ Once the player has destroyed a wave of aliens, the game starts again. The aim i
 # **Controls**
 
 * Spaceship movements: ← →  keys
+* Shoot: "Space" key
 * Start game: "Start" button
 * Play again game: "Play Again" button
-* Shoot: "Space" key
+
 
 # **Game Instructions**
 
@@ -61,10 +62,22 @@ The main idea of this project was to create a game using basic grid layout so th
 
 Initially, I created the aliens in an array and displayed them on the grid by adding class aliens to the divs. Their movement patterns are created by moving the index of the aliens array with a for each loop and then passing the alines indexes on the the div index to display.
 
+To move the player's lasers and alien's bombs I created a function with a set interval to move the index of player laser upwards and alien bomb class downwards every few milliseconds. Within this function I incorporated collision detection condition, so that when the players laser hits the alien it initiates the explosive spritesheet class and removes the alien.
+
 # **Challenges**
 
-
+There were several timings and aliens direction bugs that I had to deal with. For example, if the last alien died at left edge of the screen would mean that the global variable for next wave of aliens is still left instead of right (default value). As the aliens wave are generated at div index 0 this led to issue as the new wave of alines indexes would go - 1, -2, -3 when it should go right 0, 1, 2. I fixed this issue by generating the aliens from the centre of the grid on all cases which meant that the new wave of alien could go right or left and when they reach the edge of the grid the aliens would move down a row.
 
 # **Wins**
 
+In this project, I had to work with arrays and various array methods to build the main logic of the main. Timings events were also crucial part of this project as a lot of feature such as lasers and aliens movement depended on it and I managed to used it to create some of the main features that showed movement in the game and spritesheet animation.
+
+I was particularly pleased with my function that made use of localStorage to keep a record of score board. This gave more meaning to the game as user would try to be on the score board of top 5.
+
+<img width="778" alt="screenshot 2019-01-20 at 20 27 49" src="https://user-images.githubusercontent.com/42609274/51444643-1e729580-1cf2-11e9-9dbd-4511f7bda6e2.png">
+
+
+
 # **Future Features**
+
+If I had more time, I would like to add two particular features because it would enhance the user interface and they are screen pop up to notify players when they have leveled up and cascading animations to bring the game alive. I would like also to use Construction/Class function to create unique properties for different aliens. For example, the top row of aliens would have different styling and give away more points than the aliens on the bottom row.
