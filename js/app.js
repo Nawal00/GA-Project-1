@@ -365,7 +365,7 @@ $(() => {
     playerList.html(sortedPlayerRank.map((playerName)=> {
       return `
       <li>
-        <label for=""> ${playerName.playerName} </label>
+        <label for=""> ${playerName.playerName} - </label>
         <label for=""> ${playerName.playerScore} </label>
       </li>
       `

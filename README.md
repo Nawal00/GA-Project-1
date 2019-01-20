@@ -11,7 +11,7 @@
 * JavaScript (ES6)
 * jQuery
 * HTML5 + HTML5 Audio
-* CSS + CSS Animation GitHub
+* CSS + GitHub
 
 **My Game** - Space Invaders
 
@@ -36,7 +36,8 @@ Once the player has destroyed a wave of aliens, the game starts again. The aim i
 
 **1.** The game begins with a start page introducing the aim of the game. The game is started by clicking on the "Start" button.
 
-<img width="1280" alt="screenshot 2019-01-11 at 10 30 06" src="https://user-images.githubusercontent.com/42609274/51028647-f5ccfc00-158b-11e9-8439-b43bab31a6f4.png">
+<img width="1274" alt="screenshot 2019-01-20 at 14 58 00" src="https://user-images.githubusercontent.com/42609274/51440919-d63c7e80-1cc3-11e9-9ebc-ca8fc2691c0c.png">
+
 
 **2.** Once the game begins, the alien waves appear on the top half of the screen and the spaceship on the bottom of the screen. The Space ship can be controlled by the player using the ←  → keys. The score, level and lives(3) is also displayed on the top of the screen.
 
@@ -50,15 +51,15 @@ Once the player has destroyed a wave of aliens, the game starts again. The aim i
 
 <img width="1276" alt="screenshot 2019-01-11 at 11 25 2a7 1" src="https://user-images.githubusercontent.com/42609274/51031338-2749c580-1594-11e9-84fc-7eb3713d126f.png">
 
-**5.** The game ends when the player runs out of lives or if the aliens reaches the same level as spaceship. Subsequently, the final score and the level is displayed.
+**5.** The game ends when the player runs out of lives or if the aliens reaches the same level as spaceship. Subsequently, their final score and the score board is displayed. The player can also save their score if it is higher than the ones in the score board.
 
-<img width="1280" alt="screenshot 2019-01-11 at 11 38 31" src="https://user-images.githubusercontent.com/42609274/51031759-780dee00-1595-11e9-9712-5d7c10a45c53.png">
+<img width="1277" alt="screenshot 2019-01-20 at 14 51 03" src="https://user-images.githubusercontent.com/42609274/51440838-08011580-1cc3-11e9-836c-d74b4e684408.png">
 
 # **Process**
 
 The main idea of this project was to create a game using basic grid layout so the spaceship is able to move left and right. This was created by a list of  (20 x 20) 'div's in the HTML. Each divs within the grid is an individual element. These cells are nestled within a container. The spaceship, aliens, laser and explosions were created by applying classes to the elements within the grid. When these elements are moved, their class is also removed from the div of their current position and applied to the new div which becomes their new current position.
 
-Initially, I created the aliens in an array and displayed them on the grid by adding class aliens to the divs. Their movement patterns are created by moving the index of the aliens array with a for each loop and then passing the alines indexes on the the div index.
+Initially, I created the aliens in an array and displayed them on the grid by adding class aliens to the divs. Their movement patterns are created by moving the index of the aliens array with a for each loop and then passing the alines indexes on the the div index to display.
 
 # **Challenges**
 
