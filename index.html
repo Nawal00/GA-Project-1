@@ -12,39 +12,40 @@
 
     <div class= "startScreen">
       <h1>Space Invaders</h1>
-      <p>Save your planet by destroying the aliens</p>
+      <p class = "deadLevel">Save your planet by destroying the aliens</p>
+
+      <div class= "instruction">
+        <h3> Instructions </h3>
+        <p> To move spaceship: Keys <-- | --> </p>
+        <p> To shoot: Spacebar </p>
+      </div>
+
       <p class ="scoreDisplay"></p>
 
       <div class = "highScore">
-        <h2> High Score </h2>
-        <ul class="players">
+        <h2> Score Board </h2>
+        <ul class="players"></ul>
 
-        </ul>
-
-      <form class="display-score">
-        <p> Save your score </p>
-        <input type="text" name="playerName" placeholder="Name">
-        <input type="submit" value="Add Score">
-      </form>
-
+        <form class="display-score">
+          <p> Save your score </p>
+          <input type="text" name="playerName" placeholder="Name">
+          <input type="submit" value="Add Score">
+        </form>
       </div>
-      <p class ="scoreDisplay"></p>
+
       <button class="playBtn">PRESS START</button>
       <button class="resetBtn">PLAY AGAIN</button>
     </div>
 
     <div class= "display">
-
       <p> Score:<span class = "playerScore"> 0 </span> </p>
-
       <p> Level:<span class = "levels"> 1 </span> </p>
-
-      <p> Lives:<span class = "lives"> 3 </span> </p>
+      <p> Lives:<span class = "lives">  </span> </p>
     </div>
 
-    <div class="levelUpScreen">
+    <!-- <div class="levelUpScreen">
 
-    </div>
+    </div> -->
 
       <div class="grid"></div>
 

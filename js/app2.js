@@ -40,20 +40,3 @@ function fillList(playerNameArray, playerList){
 $displayScore.on('submit', addScore)
 
 fillList(playerScores, players)
-
-
-// <!-- <p class ="scoreDisplay"></p>
-//
-// <div class = "highScore">
-//   <h2> High Score </h2>
-//   <ul class="players">
-//
-//   </ul>
-//
-// <form class="display-score">
-//   <p> Save your score </p>
-//   <input type="text" name="playerName" placeholder="Name">
-//   <input type="submit" value="Add Score">
-// </form>
-//
-// </div> -->

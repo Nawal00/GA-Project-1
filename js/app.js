@@ -4,8 +4,10 @@ $(() => {
   const $winOrLoss = $('.winOrLoss')
   const $level = $('.levels')
   const $startScreen = $('.startScreen')
+  const $instruction = $('.instruction')
   const $h1 = $startScreen.find('h1')
-  const $p = $startScreen.find('p')
+  const $highScore = $startScreen.find('.highScore')
+  const $deadLevel = $startScreen.find('.deadLevel')
   const $p2 = $('.scoreDisplay')
   const $playBtn = $('.playBtn')
   const $resetBtn = $('.resetBtn')
@@ -143,7 +145,7 @@ $(() => {
         // remove missiles
         $divs.eq(shootingIndex).removeClass('missile')
       }
-    }, 60)
+    }, 50)
   }
 
   // filter as in delete aliens at shootingIndex
@@ -275,16 +277,17 @@ $(() => {
     }
   }
 
-
   // -------- end Game ----------
   function endGame(){
     clearInterval(alienMovingTimer)
-    $startScreen.css('display', 'flex')
+    $startScreen.show()
     $playBtn.hide()
+    $instruction.hide()
     $resetBtn.show()
     $h1.text('Game Over')
-    $p.text(`You died at level ${level}`)
+    $deadLevel.text(`You died at level ${level}`)
     $p2.text(`Your score is ${score} `)
+    $highScore.show()
   }
 
   // reset button
@@ -313,7 +316,7 @@ $(() => {
   //reset game
   $resetBtn.on('click', reset)
 
-  // function to call spritesheet
+  // function to call explosion spritesheet
   function explosive(shotIndex) {
 
     if(currentStep === 15){
@@ -356,21 +359,22 @@ $(() => {
 
   // func takes in array and html element where the returned value is shown
   function fillList(playerNameArray, playerList){
-    playerList.html(playerNameArray.map((playerName)=> {
+
+    const sortedPlayerRank = playerNameArray.sort((a, b) =>  a.playerScore < b.playerScore ? 1: -1)
+
+    playerList.html(sortedPlayerRank.map((playerName)=> {
       return `
       <li>
         <label for=""> ${playerName.playerName} </label>
         <label for=""> ${playerName.playerScore} </label>
       </li>
       `
-    }).join(''))
+    }).slice(0, 5).join(''))
   }
 
   $displayScore.on('submit', addScore)
 
   fillList(playerScores, players)
-
-
 
   //initialise game
   function init(){
