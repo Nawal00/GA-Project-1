@@ -60,7 +60,7 @@ Once the player has destroyed a wave of aliens, the game starts again. The aim i
 
 The main idea of this project was to create a game using basic grid layout so the spaceship is able to move left and right. This was created by a list of  (20 x 20) 'div's in the HTML. Each divs within the grid is an individual element. These divs are nestled within a container. The spaceship, aliens, laser and explosions were created by applying classes to the elements within the grid. When these elements are moved, their class is also removed from the div of their current position and applied to the new div which becomes their new current position.
 
-Initially, I created the aliens in an array and displayed them on the grid by adding class aliens to the divs. Their movement patterns are created by moving the index of the aliens array with a for each loop and then passing the alines indexes on the the div index to display.
+I created the aliens in an array and displayed them on the grid by adding class aliens to the divs. Their movement patterns are created by moving the index of the aliens array with a for each loop and then passing the aliens indexes on the the div index to display.
 
 To move the player's lasers and alien's bombs I created a function with a set interval to move the index of player's laser upwards and alien bomb class downwards every few milliseconds. Within this function, I incorporated collision detection condition, so that when the players laser hits the alien it initiates the explosive sprite sheet class and removes the alien.
 
@@ -81,4 +81,4 @@ I was particularly pleased with my function that made use of localStorage to kee
 
 If I had more time, I would like to add two specific features because it would enhance the user interface. They are screen pop up to notify players when they have leveled up and cascading animations to bring the game alive. I would like also to use Construction/Class function to create unique properties for different aliens. For example, the top row of aliens would have different styling and give away more points than the aliens on the bottom row.
 
-Thanks for reading and hope you enjoy shooting the aliens! 
+Thanks for reading and hope you enjoy shooting the aliens!

@@ -16,7 +16,7 @@ $(() => {
   const aliensInRow = 10
   const $displayScore = $('.display-score')
   const players = $('.players')
-  const playerScores = JSON.parse(localStorage.getItem('namescore'))
+  const playerScores = JSON.parse(localStorage.getItem('namescore')) || []
   const audio = new Audio('./sounds/shoot.wav')
   const alienDieAudio = new Audio('./sounds/invaderkilled.wav')
   const playerDirAudio = new Audio('./sounds/explosion.wav')
@@ -337,7 +337,6 @@ $(() => {
 
   //-------------- display Highscore --------------------
 
-  //add submit event listener to the form
   function addScore(e){
     // stop page from reloading bc submit reloads the page by default
     e.preventDefault()
@@ -357,7 +356,8 @@ $(() => {
     this.reset()
   }
 
-  // func takes in array and html element where the returned value is shown
+  // --------- func takes in array and html element where the returned value is shown ----------------
+
   function fillList(playerNameArray, playerList){
 
     const sortedPlayerRank = playerNameArray.sort((a, b) =>  a.playerScore < b.playerScore ? 1: -1)
