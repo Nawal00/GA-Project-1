@@ -35,12 +35,12 @@ Once the player has destroyed a wave of aliens, the game starts again. The aim i
 
 # **Game Instructions**
 
-**1.** The game begins with a start page introducing the aim of the game. The game is started by clicking on the "Start" button.
+**1.** The game begins with a start page introducing the aim of the game and the instructions. The game is started by clicking on the "Start" button.
 
 <img width="1274" alt="screenshot 2019-01-20 at 14 58 00" src="https://user-images.githubusercontent.com/42609274/51440919-d63c7e80-1cc3-11e9-9ebc-ca8fc2691c0c.png">
 
 
-**2.** Once the game begins, the alien waves appear on the top half of the screen and the spaceship on the bottom of the screen. The Space ship can be controlled by the player using the ←  → keys. The score, level and lives(3) is also displayed on the top of the screen.
+**2.** Once the game begins, the alien waves appear on the top and the players spaceship on the bottom of the screen. The Space ship can be controlled by the player using the ←  → keys. The score, level and lives(3) is also displayed on the top of the screen.
 
 <img width="1280" alt="screenshot 2019-01-11 at 10 46 03" src="https://user-images.githubusercontent.com/42609274/51029429-2d3ca800-158e-11e9-9d3e-cd1b61933b21.png">
 
